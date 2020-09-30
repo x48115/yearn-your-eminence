@@ -34,7 +34,12 @@ const LoadText = styled.div`
   margin-bottom: 25px;
 `
 
-const TipText = styled.div``
+const TipText = styled.div`
+  margin-top: 40px;
+  margin-bottom: 20px;
+`
+
+const Disclaimer = styled.div``
 
 const TipWrap = styled.div`
   display: flex;
@@ -142,6 +147,10 @@ export default function ClaimModal() {
     <TipWrap>
       <TipText>Tip developers (percentage):</TipText>{' '}
       <Input type="number" max="100" placeholder="0" value={tipAmount} onChange={setTip} />
+      <Disclaimer>
+        The return of funds to you was made possible by a team of volunteers who worked for free to make this happen.
+        Please consider tipping them a portion of your recovered funds as a way to say thank you.
+      </Disclaimer>
     </TipWrap>
   )
 
