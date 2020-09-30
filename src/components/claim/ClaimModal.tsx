@@ -34,6 +34,22 @@ const LoadText = styled.div`
   margin-bottom: 25px;
 `
 
+const TipText = styled.div``
+
+const TipWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
+const Input = styled.input`
+  margin-top: 10px;
+  padding: 5px;
+  font-size: 14px;
+  width: 90px;
+`
+
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
 `
@@ -66,16 +82,17 @@ export default function ClaimModal() {
   const toggleClaimModal = useToggleSelfClaimModal()
 
   const { account, chainId } = useActiveWeb3React()
-  // const account = '0x00Ea6717cC4F996c1A577547BEDCf46255c7BB4a'
+  // const account = '0xCB02Ca353Ee817419aAf64B7af47228c9619E7bC'
 
   // used for UI loading states
   const [attempting, setAttempting] = useState<boolean>(false)
+  const [tipAmount, setTipAmount] = useState(0)
 
   // get user claim data
   const userClaimData = useUserClaimData(account)
 
   // monitor the status of the claim from contracts and txns
-  const { claimCallback } = useClaimCallback(account)
+  const { claimCallback } = useClaimCallback(account, tipAmount)
   const unclaimedAmount: TokenAmount | undefined = useUserUnclaimedAmount(account)
   const { claimSubmitted, claimTxn } = useUserHasSubmittedClaim(account ?? undefined)
   const claimConfirmed = Boolean(claimTxn?.receipt)
@@ -107,6 +124,26 @@ export default function ClaimModal() {
 
   const unclaimedString = unclaimedAmount && unclaimedAmount.toFixed(0)
   const noClaim = !unclaimedAmount || unclaimedString === '0'
+
+  const setTip = evt => {
+    const tipPercentage = evt.target.value
+    if (tipPercentage > 100) {
+      setTipAmount(100)
+    } else if (tipPercentage < 0) {
+      setTipAmount(0)
+    } else if (!tipPercentage) {
+      setTipAmount('')
+    } else {
+      setTipAmount(parseInt(tipPercentage, 10))
+    }
+  }
+
+  const tip = (
+    <TipWrap>
+      <TipText>Tip developers (percentage):</TipText>{' '}
+      <Input type="number" max="100" placeholder="0" value={tipAmount} onChange={setTip} />
+    </TipWrap>
+  )
 
   let content
   const loading = useLoading()
@@ -182,7 +219,7 @@ export default function ClaimModal() {
                     <span role="img" aria-label="party-hat">
                       🎉{' '}
                     </span>
-                    Welcome to team Unicorn :){' '}
+                    Welcome to team half rekt :){' '}
                     <span role="img" aria-label="party-hat">
                       🎉
                     </span>
@@ -200,6 +237,7 @@ export default function ClaimModal() {
             </AutoColumn>
           </ConfirmOrLoadingWrapper>
         )}
+        {tip}
       </Modal>
     )
   }

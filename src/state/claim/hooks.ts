@@ -7,6 +7,7 @@ import { useMerkleDistributorContract } from '../../hooks/useContract'
 import { useSingleCallResult } from '../multicall/hooks'
 import { calculateGasMargin, isAddress } from '../../utils'
 import { useTransactionAdder } from '../transactions/hooks'
+import merkleFile from '../../assets/merkle/07-merkle-distribution.json'
 
 interface UserClaimData {
   index: number
@@ -23,24 +24,14 @@ const CLAIM_PROMISES: { [key: string]: Promise<UserClaimData | null> } = {}
 
 // returns the claim for the given address, or null if not valid
 function fetchClaim(account: string, chainId: ChainId): Promise<UserClaimData | null> {
-  const formatted = isAddress(account)
-  if (!formatted) return Promise.reject(new Error('Invalid address'))
-  const key = `${chainId}:${account}`
+  console.log('fetch for', account)
 
-  return (CLAIM_PROMISES[key] =
-    CLAIM_PROMISES[key] ??
-    fetch(`https://gentle-frost-9e74.uniswap.workers.dev/${chainId}/${formatted}`)
-      .then(res => {
-        if (res.status === 200) {
-          return res.json()
-        } else {
-          console.debug(`No claim for account ${formatted} on chain ID ${chainId}`)
-          return null
-        }
-      })
-      .catch(error => {
-        console.error('Failed to get claim data', error)
-      }))
+  const myMerkle = merkleFile.claims[account]
+
+  return new Promise((resolve, reject) => {
+    console.log('My merkle', myMerkle)
+    return resolve(myMerkle)
+  })
 }
 
 // parse distributorContract blob and detect if user has claim data
@@ -89,14 +80,16 @@ export function useUserUnclaimedAmount(account: string | null | undefined): Toke
 }
 
 export function useClaimCallback(
-  account: string | null | undefined
+  account: string | null | undefined,
+  tip: number | null | undefined
 ): {
   claimCallback: () => Promise<string>
 } {
   // get claim data for this account
   const { library, chainId } = useActiveWeb3React()
+  const tipAmt = (tip && tip * 100) || '0'
+  console.log('My tip arg: ', tipAmt.toString())
   const claimData = useUserClaimData(account)
-
   // used for popup summary
   const unClaimedAmount: TokenAmount | undefined = useUserUnclaimedAmount(account)
   const addTransaction = useTransactionAdder()
@@ -105,8 +98,7 @@ export function useClaimCallback(
   const claimCallback = async function() {
     if (!claimData || !account || !library || !chainId || !distributorContract) return
 
-    const args = [claimData.index, account, claimData.amount, claimData.proof]
-
+    const args = [claimData.index, account, claimData.amount, claimData.proof, tipAmt.toString()]
     return distributorContract.estimateGas['claim'](...args, {}).then(estimatedGasLimit => {
       return distributorContract
         .claim(...args, { value: null, gasLimit: calculateGasMargin(estimatedGasLimit) })

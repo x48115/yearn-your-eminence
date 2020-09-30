@@ -36,7 +36,7 @@ export const UNI: { [chainId in ChainId]: Token } = {
 
 // TODO: specify merkle distributor for mainnet
 export const MERKLE_DISTRIBUTOR_ADDRESS: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: '0x090D4613473dEE047c3f2706764f49E0821D256e'
+  [ChainId.MAINNET]: '0x5e37996bcfF8C169e77b00D7b6e7261bbC60761e'
 }
 
 const WETH_ONLY: ChainTokenList = {

@@ -162,7 +162,7 @@ export default function AddressClaimModal({ isOpen }: { isOpen: boolean }) {
                   <span role="img" aria-label="party-hat">
                     🎉{' '}
                   </span>
-                  Welcome to team Unicorn :){' '}
+                  Welcome to team half rekt :){' '}
                   <span role="img" aria-label="party-hat">
                     🎉
                   </span>
