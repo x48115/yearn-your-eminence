@@ -145,8 +145,8 @@ export default function ClaimModal() {
 
   const tip = (
     <TipWrap>
-      <TipText>Tip developers (percentage):</TipText>{' '}
-      <Input type="number" max="100" placeholder="0" value={tipAmount} onChange={setTip} />
+      <TipText>Tip developers:</TipText> {tipAmount.toString()}%
+      <input type="range" min="0" max="100" value={tipAmount} onChange={setTip} />
       <Disclaimer>
         The return of funds to you was made possible by a team of volunteers who worked for free to make this happen.
         Please consider tipping them a portion of your recovered funds as a way to say thank you.
