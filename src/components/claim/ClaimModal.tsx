@@ -86,8 +86,8 @@ export default function ClaimModal() {
   const isOpen = true
   const toggleClaimModal = useToggleSelfClaimModal()
 
-  const { account, chainId } = useActiveWeb3React()
-  // const account = '0xCB02Ca353Ee817419aAf64B7af47228c9619E7bC'
+  const { chainId } = useActiveWeb3React()
+  const account = '0xb8CcA5D23DC16aD9e56E3426783912F7CF90234c'
 
   // used for UI loading states
   const [attempting, setAttempting] = useState<boolean>(false)
