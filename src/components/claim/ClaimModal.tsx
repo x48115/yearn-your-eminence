@@ -206,7 +206,7 @@ export default function ClaimModal() {
             </RowBetween>
             <ConfirmedIcon>
               {!claimConfirmed ? (
-                <CustomLightSpinner src={Circle} alt="loader" size={'90px'} />
+                <CustomLightSpinner src={Circle} alt="" size={'90px'} />
               ) : (
                 <UniTokenAnimated width="72px" src={tokenLogo} />
               )}
