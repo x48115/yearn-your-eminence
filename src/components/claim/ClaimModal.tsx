@@ -34,12 +34,12 @@ const LoadText = styled.div`
   margin-bottom: 25px;
 `
 
-const TipText = styled.div`
+const TipText = styled.div``
+
+const Disclaimer = styled.div`
   margin-top: 40px;
   margin-bottom: 20px;
 `
-
-const Disclaimer = styled.div``
 
 const TipWrap = styled.div`
   display: flex;
